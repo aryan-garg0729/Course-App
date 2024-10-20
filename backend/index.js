@@ -55,10 +55,52 @@ app.get('/mycourses',authmiddleware,async(req,res)=>{
 
 app.get('/my-courses/content',authmiddleware,async(req,res)=>{
     const course_id =req.query.courseId;
-    const videos = await Video.find({course_id})
+    const videos = await Video.find({ course_id }).sort({ videoIndex: 1 });
+
+    // videos.role=req.body.role
     console.log(videos)
-    res.send(videos)
+    res.json({role:req.body.role,videos:videos});
 })
+
+app.delete('/deleteVideo',authmiddleware,async(req,res)=>{
+    try {
+        console.log(req.query._id)
+        const response = await Video.deleteOne({_id:req.query._id});
+        res.status(200).json({message:'Successfully deleted'})
+    } catch (error) {
+        res.status(400).json({message:'Error Deleting'})
+    }
+    
+    
+})
+app.put('/editVideo', authmiddleware, async (req, res) => {
+    try {
+        const { _id, ...updateData } = req.body.video;  // Extract the _id and other fields to update
+        console.log(_id)
+        const response = await Video.updateOne({ _id }, { $set: updateData });  // Use $set to update the fields
+        console.log(response)
+        if (response.modifiedCount > 0) {
+            res.status(200).json({ message: 'Successfully updated' });
+        } else {
+            res.status(400).json({ message: 'No changes were made' });
+        }
+    } catch (error) {
+        res.status(400).json({ message: 'Error Updating' });
+    }
+});
+app.post('/addVideo', authmiddleware, async (req, res) => {
+    try {
+        console.log(req.body)
+      const { title, duration, url, course_id } = req.body.video;
+      const newVideo = new Video({ title, duration, url,videoIndex:1, course_id });
+      await newVideo.save();
+      res.status(200).json({ message: 'Video added successfully', newVideo });
+    } catch (error) {
+      res.status(400).json({ message: 'Error adding video' });
+    }
+  });
+  
+
 
 app.post('/signup',async(req,res)=>{
     const {name, email, password,role} = req.body;

@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken')
 const {JWT_SECRET} = require('../config.js')
 const authmiddleware = (req,res,next)=>{
     const token = req.headers.authorization;
+    // console.log(token)
     try {
         const decodedValue = jwt.verify(token, JWT_SECRET);
         if (decodedValue.email) {

@@ -1,90 +1,159 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from 'react-router-dom';
 import axios from "axios";
+import { toast } from "react-toastify";
+import Modal from 'react-modal';
+import VideoModal from "./VideoModal";
+import VideoPlayer from "./VideoPlayer";
+import VideoList from "./VideoList";
 
-// Example video URL data (replace with actual data from the database)
-// const videoData = [
-//   {
-//     title: "Introduction to Course",
-//     url: "https://www.example.com/video1.mp4",
-//     duration: "10:00",
-//     videoIndex: 1,
-//   },
-//   {
-//     title: "Lesson 2: Advanced Topic",
-//     url: "https://www.example.com/video2.mp4",
-//     duration: "15:00",
-//     videoIndex: 2,
-//   },
-//   {
-//     title: "Lesson 3: Mastery Topic",
-//     url: "https://www.example.com/video3.mp4",
-//     duration: "12:30",
-//     videoIndex: 3,
-//   },
-// ];
+// Bind modal to your app element to prevent accessibility-related issues
+Modal.setAppElement('#root');
 
 const CourseVideoPage = () => {
-  // State for the selected video
   const location = useLocation()
-  const courseId = location.state.courseId||{}
-  const [selectedVideo, setSelectedVideo] = useState("");
-  const [videoData,setVideoData] = useState([]);
+  const courseId = location.state.courseId || {}
+  // State for the selected video
+  const [selectedVideo, setSelectedVideo] = useState({});
+  // all data related to course videos
+  const [videoData, setVideoData] = useState([]);
+  // is the user instructor or student?
+  const [role, setRole] = useState('');
+  // State to control modal visibility and form data
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [formData, setFormData] = useState({});
+  // is the modal opened for creating new video or editing
+  const [create, setcreate] = useState(false);
 
-  // Mock fetch for videos (you can replace this with axios or fetch)
   useEffect(() => {
-    // Fetch video data from backend (example)
     axios.get(`http://localhost:3000/my-courses/content`, {
-        params: {courseId: courseId }, // Sending courseId as a query parameter
+      params: { courseId: courseId }, // Sending courseId as a query parameter
+      headers: {
+        Authorization: JSON.parse(localStorage.getItem('Authorization')),
+      },
+    })
+      .then((response) => {
+        setVideoData(response.data.videos)
+        // console.log(response)
+        setRole(response.data.role);
+        if(response.data.videos.length>0)setSelectedVideo(() => response.data.videos[0])
+      })
+      .catch((error) => console.error(error));
+  }, []);
+  // notify toast
+  const notify = (message, status) => {
+    if (status == 200) toast.success(message)
+    else toast.error(message)
+  }
+
+  // handle deletion of video
+  const handleDelete = async (id) => {
+    try {
+      console.log(id)
+      const res = await axios.delete("http://localhost:3000/deleteVideo", {
+        params: { _id: id },
+        headers: {
+          Authorization: JSON.parse(localStorage.getItem('Authorization')),
+        }
+      })
+      notify(res.data.message, 200)
+    } catch (error) {
+      notify(error.response.data.message, 400)
+    }
+
+  }
+
+  // Function to open modal and set the current video data
+  const handleEdit = (video) => {
+    setFormData(video);
+    setIsModalOpen(true);
+    setcreate(false)
+  };
+  
+  // Function to open modal and set course id 
+  const handleCreate = () => {
+    console.log(courseId)
+    setFormData({
+      title: "",
+      duration: "",
+      url: "",
+      course_id: courseId
+    });
+    setcreate(true);
+    setIsModalOpen(true);
+  };
+
+  // Function to handle form input changes
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  // Function to handle form submission (e.g., send data to backend)
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
+    console.log('Edited video data:', formData);
+    // Add logic here to send updated data to the backend (e.g., axios PUT request)
+    try {
+      const res = await axios.put("http://localhost:3000/editVideo", { video: formData }, {
+        headers: {
+          Authorization: JSON.parse(localStorage.getItem('Authorization')),
+        }
+      })
+      notify(res.data.message, 200)
+    } catch (error) {
+      notify(error.response.data.message, 400)
+    }
+    setIsModalOpen(false);
+  };
+
+  // Handle form submission to add new video
+  const handleAddSubmit = async (e) => {
+    e.preventDefault();
+    console.log('New video data:', formData);
+
+    try {
+      const res = await axios.post("http://localhost:3000/addVideo", { video: formData }, {
         headers: {
           Authorization: JSON.parse(localStorage.getItem('Authorization')),
         },
-      })
-        .then((response) => {
-            setVideoData(response.data)
-            setSelectedVideo(()=>response.data[0])
-        })
-        .catch((error) => console.error(error));
-  }, []);
+      });
+      notify(res.data.message, 200);
+      // After successfully adding, refresh the video list or add the new video to videoData
+      // setVideoData((prevVideos) => [...prevVideos, res.data.newVideo]);  // Update the video list
+      setIsModalOpen(false);  // Close the modal
+    } catch (error) {
+      notify(error.response.data.message, 400);
+    }
+  };
 
   return (
     <div className="flex flex-col md:flex-row gap-4 p-4">
       {/* Left side: Video Player */}
-      <div className="flex-1">
-        <div className="w-full">
-          <video
-            key={selectedVideo.url}
-            controls
-            className="w-full rounded-lg shadow-lg"
-          >
-            <source src={selectedVideo.url} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-        </div>
-        <h2 className="mt-4 text-xl font-bold">{selectedVideo.title}</h2>
-        <p className="text-gray-600">{`Duration: ${selectedVideo.duration}`}</p>
-      </div>
+      <VideoPlayer selectedVideo={selectedVideo} />
 
       {/* Right side: Video List */}
-      <div className="md:w-1/3 w-full bg-gray-100 p-4 rounded-lg shadow-lg overflow-y-auto h-96">
-        <h3 className="text-lg font-semibold mb-4">Course Content</h3>
-        <ul className="space-y-2">
-          {videoData.map((video, index) => (
-            <li
-              key={index}
-              className={`p-2 rounded-lg cursor-pointer hover:bg-purple-100 ${
-                selectedVideo.videoIndex === video.videoIndex ? "bg-purple-200" : ""
-              }`}
-              onClick={() => setSelectedVideo(video)}
-            >
-              <div className="flex justify-between">
-                <span>{`${video.videoIndex}. ${video.title}`}</span>
-                <span className="text-gray-500 text-sm">{video.duration}</span>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
+      <VideoList 
+        videoData={videoData}
+        selectedVideo={selectedVideo}
+        setSelectedVideo={setSelectedVideo}
+        role={role} handleEdit={handleEdit}
+        handleDelete={handleDelete}
+        handleCreate={handleCreate}
+      />
+
+      <VideoModal
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+        formData={formData}
+        handleChange={handleChange}
+        handleSubmit={create ? handleAddSubmit : handleEditSubmit}
+        create={create}
+      />
+
     </div>
   );
 };
