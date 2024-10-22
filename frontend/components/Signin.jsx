@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const Signin = () => {
@@ -120,6 +120,7 @@ const Signin = () => {
                         </button>
                     </div>
                 </form>
+                <Link to="/register" ><div className="text-blue-500 text-center mt-2 font-semibold hover:text-blue-600">Not registered?</div></Link>
             </div>
         </div>
     );

@@ -1,16 +1,16 @@
 import React from "react";
 import Modal from 'react-modal';
 
-const VideoModal = ({ isModalOpen, setIsModalOpen, formData, handleChange, handleSubmit, create }) => {
+const VideoModal = ({ isModalOpen, setIsModalOpen, formData, handleChange, handleSubmit, title }) => {
   return (
     <Modal
     isOpen={isModalOpen}
     onRequestClose={() => setIsModalOpen(false)}
-    contentLabel="Edit Video Modal"
+    contentLabel={title}
     className="modal-content"
     overlayClassName="modal-overlay"
   >
-    <h2 className="text-xl font-bold mb-4">{create?"Create Video" :"Edit Video"}</h2>
+    <h2 className="text-xl font-bold mb-4">{title}</h2>
 
     <form onSubmit={handleSubmit}>
       <div className="mb-4">

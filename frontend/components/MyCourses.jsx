@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 
 const MyCourses = () => {
     const [courses, setCourseData] = useState([]);
+    const [role, setRole] = useState("");
     const notify = (message, status) => {
         if (status == 200) toast.success(message)
         else toast.error(message)
@@ -16,7 +17,8 @@ const MyCourses = () => {
                 Authorization: JSON.parse(localStorage.getItem('Authorization'))
             }
         }).then((res) => {
-            setCourseData(()=>res.data);
+            setCourseData(()=>res.data.courses);
+            setRole(()=>res.data.role);
         }).catch((error) => { notify(error.response.data.message,400); })
     }, [])
     
@@ -28,7 +30,7 @@ const MyCourses = () => {
           {courses.map((course) =>{
             course.bought=true;
             return (
-                <Link key={course._id} to={`/my-courses/${course._id}`} state={{courseId:course._id}}><Card course={course}/></Link>
+                <Card course={course} role={role} path={`/my-courses/${course._id}`}/>
               )
           }) }
         </div>

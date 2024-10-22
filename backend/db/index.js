@@ -98,7 +98,7 @@ const courseSchema = new mongoose.Schema({
       min: 1,
       max: 5  // Ratings typically range from 1 to 5
     },
-    review: {
+    comment: {
       type: String,
       required: false,
       maxlength: 1000  // Optional, max character limit for review text
@@ -136,10 +136,19 @@ ratingSchema.statics.calculateAvgRating = async function(courseId) {
 ratingSchema.post('save', function() {
   this.constructor.calculateAvgRating(this.course);
 });
- 
+ratingSchema.post('save', function() {
+  this.constructor.calculateAvgRating(this.course);
+});
+ratingSchema.post('updateOne', async function(doc) {
+  const courseId = this.getUpdate().$set.course || doc.course; // Fetch the course ID from the update if available
+  if (courseId) {
+    await this.model.calculateAvgRating(courseId);
+  }
+});
+
 const Course = mongoose.model('Course', courseSchema);  
 const User = mongoose.model('User', userSchema);
-const Review = mongoose.model('Review', userSchema);
+const Review = mongoose.model('Review', ratingSchema);
 const Video = mongoose.model('Video', VideoSchema);
 
 module.exports = {

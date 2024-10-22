@@ -6,13 +6,14 @@ import Modal from 'react-modal';
 import VideoModal from "./VideoModal";
 import VideoPlayer from "./VideoPlayer";
 import VideoList from "./VideoList";
+import ReviewSection from "./Reviews";
 
 // Bind modal to your app element to prevent accessibility-related issues
 Modal.setAppElement('#root');
 
 const CourseVideoPage = () => {
   const location = useLocation()
-  const courseId = location.state.courseId || {}
+  const courseId = location.state.course._id || {}
   // State for the selected video
   const [selectedVideo, setSelectedVideo] = useState({});
   // all data related to course videos
@@ -24,6 +25,7 @@ const CourseVideoPage = () => {
   const [formData, setFormData] = useState({});
   // is the modal opened for creating new video or editing
   const [create, setcreate] = useState(false);
+  const [updated, setupdated] = useState(false);
 
   useEffect(() => {
     axios.get(`http://localhost:3000/my-courses/content`, {
@@ -36,15 +38,17 @@ const CourseVideoPage = () => {
         setVideoData(response.data.videos)
         // console.log(response)
         setRole(response.data.role);
-        if(response.data.videos.length>0)setSelectedVideo(() => response.data.videos[0])
+        if (response.data.videos.length > 0) setSelectedVideo(() => response.data.videos[0])
       })
       .catch((error) => console.error(error));
-  }, []);
+  }, [updated]);
   // notify toast
   const notify = (message, status) => {
     if (status == 200) toast.success(message)
     else toast.error(message)
   }
+
+
 
   // handle deletion of video
   const handleDelete = async (id) => {
@@ -57,6 +61,8 @@ const CourseVideoPage = () => {
         }
       })
       notify(res.data.message, 200)
+      setupdated((prev) => !prev);
+
     } catch (error) {
       notify(error.response.data.message, 400)
     }
@@ -69,7 +75,7 @@ const CourseVideoPage = () => {
     setIsModalOpen(true);
     setcreate(false)
   };
-  
+
   // Function to open modal and set course id 
   const handleCreate = () => {
     console.log(courseId)
@@ -104,6 +110,8 @@ const CourseVideoPage = () => {
         }
       })
       notify(res.data.message, 200)
+      setupdated((prev) => !prev);
+
     } catch (error) {
       notify(error.response.data.message, 400)
     }
@@ -125,35 +133,40 @@ const CourseVideoPage = () => {
       // After successfully adding, refresh the video list or add the new video to videoData
       // setVideoData((prevVideos) => [...prevVideos, res.data.newVideo]);  // Update the video list
       setIsModalOpen(false);  // Close the modal
+      setupdated((prev) => !prev);
+
     } catch (error) {
       notify(error.response.data.message, 400);
     }
   };
 
   return (
-    <div className="flex flex-col md:flex-row gap-4 p-4">
-      {/* Left side: Video Player */}
-      <VideoPlayer selectedVideo={selectedVideo} />
+    <div>
+      <div className="flex flex-col md:flex-row gap-4 p-4">
+        {/* Left side: Video Player */}
+        <VideoPlayer selectedVideo={selectedVideo} />
 
-      {/* Right side: Video List */}
-      <VideoList 
-        videoData={videoData}
-        selectedVideo={selectedVideo}
-        setSelectedVideo={setSelectedVideo}
-        role={role} handleEdit={handleEdit}
-        handleDelete={handleDelete}
-        handleCreate={handleCreate}
-      />
+        {/* Right side: Video List */}
+        <VideoList
+          videoData={videoData}
+          selectedVideo={selectedVideo}
+          setSelectedVideo={setSelectedVideo}
+          role={role} handleEdit={handleEdit}
+          handleDelete={handleDelete}
+          handleCreate={handleCreate}
+        />
 
-      <VideoModal
-        isModalOpen={isModalOpen}
-        setIsModalOpen={setIsModalOpen}
-        formData={formData}
-        handleChange={handleChange}
-        handleSubmit={create ? handleAddSubmit : handleEditSubmit}
-        create={create}
-      />
+        <VideoModal
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+          formData={formData}
+          handleChange={handleChange}
+          handleSubmit={create ? handleAddSubmit : handleEditSubmit}
+          title={create ? "Create Video" : "Edit Video"}
+        />
 
+      </div>
+      <ReviewSection course_id={courseId} allowReviews={true}/>
     </div>
   );
 };

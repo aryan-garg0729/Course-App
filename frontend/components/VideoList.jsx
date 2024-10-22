@@ -20,7 +20,7 @@ const VideoList = ({ videoData,selectedVideo, setSelectedVideo, role, handleEdit
               key={index}
               className={`p-2 rounded-lg cursor-pointer hover:bg-purple-100 ${selectedVideo.videoIndex === video.videoIndex ? "bg-purple-200" : ""
                 }`}
-              onClick={() => setSelectedVideo(video)}
+              onClick={() => {setSelectedVideo(video);console.log(video.title)}}
             >
               <div className="flex justify-between items-center group">
                 <span className="py-1">{`${index + 1}. ${video.title}`}</span>
@@ -34,7 +34,7 @@ const VideoList = ({ videoData,selectedVideo, setSelectedVideo, role, handleEdit
                   </button>
                 </div>) : <></>}
 
-                <span className="text-gray-500 text-sm">{video.duration}</span>
+                {/* <span className="text-gray-500 text-sm">{video.duration}</span> */}
               </div>
 
             </li>

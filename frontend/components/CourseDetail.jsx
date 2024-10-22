@@ -3,6 +3,7 @@ import axios from 'axios';
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import ReviewSection from './Reviews';
 
 const CourseDetail = () => {
     const location = useLocation()
@@ -130,6 +131,7 @@ const CourseDetail = () => {
                     </div>
                 </div>
             </div>
+            <ReviewSection course_id={course._id} allowReviews={false}/>
         </div>
     );
 };

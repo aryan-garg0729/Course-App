@@ -9,11 +9,13 @@ import Profile from '../components/Profile'
 import Contact from '../components/Contact'
 import MyCourses from '../components/MyCourses'
 import CourseVideoPage from '../components/CourseVideoPage'
+import Reviews from '../components/Reviews'
 
 function App() {
   return (
     <BrowserRouter>
       <Navbar/>
+    
       <Routes>
         <Route path='/' element={<AllCourses/>}></Route>
         <Route path='/profile' element={<Profile/>}></Route>

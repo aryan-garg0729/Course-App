@@ -4,6 +4,9 @@
 /* *{
     border: 1px solid red;
 } */
+ .border-b-1{
+    border-bottom: 1px solid rgba(89, 89, 89, 0.663);
+ }
  /* Scrollbar Styling */
 ::-webkit-scrollbar {
     width: 10px;
