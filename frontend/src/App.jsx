@@ -10,6 +10,7 @@ import Contact from '../components/Contact'
 import MyCourses from '../components/MyCourses'
 import CourseVideoPage from '../components/CourseVideoPage'
 import Reviews from '../components/Reviews'
+import Cart from '../components/Cart'
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path='/login' element={<Signin/>}></Route>
         <Route path='/register' element={<Signup/>}></Route>
         <Route path='/contact' element={<Contact/>}></Route>
+        <Route path='/cart' element={<Cart/>}></Route>
         <Route path='/my-courses' element={<MyCourses/>}></Route>
         <Route path='/my-courses/:id' element={<CourseVideoPage/>}></Route>
         <Route path="/course/:id" element={<CourseDetail/>} /> {/* Dynamic route */}

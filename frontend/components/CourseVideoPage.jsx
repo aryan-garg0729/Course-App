@@ -176,21 +176,15 @@ const VideoListSkeleton = () => {
   return (
     <div className="md:w-1/3 w-full bg-gray-100 p-4 rounded-lg shadow-lg overflow-y-auto h-96">
       {/* Title skeleton */}
-      <div className="mb-4 h-6 w-1/2 bg-gray-300 rounded"></div>
+      <div className="mb-4 h-6 w-1/2 bg-gray-300 rounded animate-pulse"></div>
 
       {/* List skeleton items */}
       <ul className="space-y-2">
-        {[...Array(4)].map((_, index) => (
-          <li key={index} className="p-2 bg-gray-200 rounded-lg">
+        {[...Array(7)].map((_, index) => (
+          <li key={index} className="p-2 bg-gray-200 rounded-lg animate-pulse">
             <div className="flex justify-between items-center">
               {/* Video title skeleton */}
-              <div className="h-4 w-3/4 bg-gray-300 rounded"></div>
-
-              {/* Edit/Delete buttons skeleton */}
-              <div className="space-x-2 hidden group-hover:flex">
-                <div className="h-6 w-12 bg-gray-300 rounded"></div>
-                <div className="h-6 w-12 bg-gray-300 rounded"></div>
-              </div>
+              <div className="h-5 w-3/4 bg-gray-300 rounded"></div>
             </div>
           </li>
         ))}
@@ -198,20 +192,19 @@ const VideoListSkeleton = () => {
     </div>
   );
 };
-
 const VideoPlayerSkeleton = () => {
   return (
     <div className="flex-1">
       {/* Video skeleton */}
-      <div className="w-full">
-        <div className="relative w-full bg-gray-300" style={{ paddingBottom: '56.25%' /* 16:9 aspect ratio */ }}></div>
+      <div className="w-full rounded-md overflow-hidden">
+        <div className="relative w-full bg-gray-300 animate-pulse" style={{ paddingBottom: '56.25%' /* 16:9 aspect ratio */ }}></div>
       </div>
 
       {/* Title skeleton */}
-      <div className="mt-4 h-6 w-1/2 bg-gray-300 rounded"></div>
+      <div className="mt-4 h-6 w-1/2 bg-gray-300 rounded animate-pulse"></div>
 
       {/* Duration skeleton */}
-      <div className="mt-2 h-4 w-1/4 bg-gray-200 rounded"></div>
+      <div className="mt-2 h-4 w-1/4 bg-gray-200 rounded animate-pulse"></div>
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import { StarIcon } from '@heroicons/react/16/solid';
 import axios from 'axios';
-import React from 'react';
+import React,{useState, useEffect} from 'react';
 import { useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import ReviewSection from './Reviews';
@@ -8,7 +8,34 @@ import ReviewSection from './Reviews';
 const CourseDetail = () => {
     const location = useLocation()
     const course = location.state.course||{}
+    const useCart = () => {
+        const [cart, setCart] = useState(() => {
+            // Retrieve cart data from local storage or initialize as an empty array
+            const savedCart = localStorage.getItem('cart');
+            return savedCart ? JSON.parse(savedCart) : [];
+        });
 
+        useEffect(() => {
+            // Save cart data to local storage whenever it changes
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }, [cart]);
+
+        return [cart, setCart];
+    };
+    const [cart, setCart] = useCart();
+    const addToCart = (item) => {
+        setCart((prevCart) => {
+            // Check if item already exists in the cart
+            const existingItem = prevCart.find((cartItem) => cartItem._id === item._id);
+            if (existingItem) {
+                return prevCart;
+            }
+            // If item doesn't exist, add it
+            return [...prevCart, { ...item, totalPrice: item.totalPrice}];
+        });
+        notify('Course Added to Cart',200)
+    };
+    
     // Function to render stars dynamically
     const renderStars = (rating) => {
         const fullStars = Math.floor(rating);
@@ -122,7 +149,7 @@ const CourseDetail = () => {
                         </div>
 
                         {/* Buttons */}
-                        <button className="bg-purple-500 hover:bg-purple-700 text-white text-lg font-semibold py-3 w-full rounded-md transition">
+                        <button onClick={()=>addToCart(course)} className="bg-purple-500 hover:bg-purple-700 text-white text-lg font-semibold py-3 w-full rounded-md transition">
                             Add to cart
                         </button>
                         <button onClick={initiateBuy} className="bg-gray-200 hover:bg-gray-300 text-gray-800 text-lg font-semibold py-3 w-full rounded-md transition">
