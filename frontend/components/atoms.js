@@ -2,7 +2,7 @@ import { atom } from "recoil";
 
 export const AllCourseAtom = atom({
     key:"allcourses",
-    default:null,
+    default:[],
 })
 export const userState = atom({
     key: 'userState', // unique ID (with respect to other atoms/selectors)

@@ -15,7 +15,7 @@ const AllCourses = () => {
     const [coursesData, setCourseData] = useRecoilState(AllCourseAtom);
     const [loading, setLoading] = useState(true);
     useEffect(() => {
-        if (!coursesData) {
+        if (coursesData.length==0) {
             axios.get('http://localhost:3000/courses', {
                 // headers: {
                 //     Authorization: JSON.parse(localStorage.getItem('Authorization'))

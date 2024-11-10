@@ -41,11 +41,11 @@ const Navbar = () => {
           <div className="hidden md:block space-x-8">
             <NavLink to="/" className={({isActive})=>`${commonDesktopClasses} ${isActive?'text-purple-600':''}`}>Home</NavLink>
             <NavLink to="/contact" className={({isActive})=>`${commonDesktopClasses} ${isActive?'text-purple-600':''}`}>Contact</NavLink>
+            <NavLink to="/cart" className={({isActive})=>`${commonDesktopClasses} ${isActive?'text-purple-600':''}`}>Cart</NavLink>
             
             {/* Show this section only if user is logged in */}
             {isLoggedIn ? (
               <>
-                <NavLink to="/cart" className={({isActive})=>`${commonDesktopClasses} ${isActive?'text-purple-600':''}`}>Cart</NavLink>
                 <NavLink to="/my-courses" className={({isActive})=>`${commonDesktopClasses} ${isActive?'text-purple-600':''}`}>My Courses</NavLink>
                 <NavLink to="/profile" className={({isActive})=>`${commonDesktopClasses} ${isActive?'text-purple-600':''}`}>Profile</NavLink>
                 <button onClick={handleLogout} className="text-white bg-red-600 hover:bg-red-500 px-4 py-2 rounded-lg font-semibold">
@@ -75,11 +75,11 @@ const Navbar = () => {
         <div className="px-2 pt-2 pb-3 space-y-2">
           <NavLink to="/" className={({isActive})=>`${commonMobileClasses} ${isActive?'text-purple-600':''}`}>Home</NavLink>
           <NavLink to="/contact" className={({isActive})=>`${commonMobileClasses} ${isActive?'text-purple-600':''}`}>Contact</NavLink>
+          <NavLink to="/cart" className={({isActive})=>`${commonMobileClasses} ${isActive?'text-purple-600':''}`}>Cart</NavLink>
 
           {/* Mobile menu - Show based on login status */}
           {isLoggedIn ? (
             <>
-              <NavLink to="/cart" className={({isActive})=>`${commonMobileClasses} ${isActive?"text-purple-600":''}`}>Cart</NavLink>
               <NavLink to="/my-courses" className={({isActive})=>`${commonMobileClasses} ${isActive?'text-purple-600':''}`}>My Courses</NavLink>
               <NavLink to="/profile" className={({isActive})=>`${commonMobileClasses} ${isActive?'text-purple-600':''}`}>Profile</NavLink>
               <button onClick={handleLogout} className="block w-full text-white bg-red-600 hover:bg-red-500 px-4 py-2 rounded-lg">

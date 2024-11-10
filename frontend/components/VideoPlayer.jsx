@@ -12,7 +12,7 @@ function VideoPlayer({ selectedVideo }) {
   return (
     <div className="flex-1">
       <div className="w-full">
-        <video
+        {/* <video
             ref={videoRef}
             key={selectedVideo.url}
             controls
@@ -21,10 +21,10 @@ function VideoPlayer({ selectedVideo }) {
           >
             <source src={selectedVideo.url} type="video/mp4" />
             Your browser does not support the video tag.
-          </video>
+          </video> */}
 
           {/* or embed from youtube */}
-        {/* <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+        <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
           <iframe
             className="absolute top-0 left-0 w-full h-full rounded-lg shadow-lg"
             src="https://www.youtube.com/embed/YefD_gj3svM?start=3107"
@@ -33,7 +33,7 @@ function VideoPlayer({ selectedVideo }) {
             allowFullScreen
             title="Embedded YouTube Video"
           ></iframe>
-        </div> */}
+        </div>
       </div>
       <h2 className="mt-4 text-xl font-bold">{selectedVideo.title}</h2>
       <p className="text-gray-600">{`Duration: ${Math.floor(duration / 60)}min`}</p>

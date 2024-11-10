@@ -11,6 +11,7 @@ import MyCourses from '../components/MyCourses'
 import CourseVideoPage from '../components/CourseVideoPage'
 import Reviews from '../components/Reviews'
 import Cart from '../components/Cart'
+import Chatbot from '../components/Chatbot'
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route path='/my-courses/:id' element={<CourseVideoPage/>}></Route>
         <Route path="/course/:id" element={<CourseDetail/>} /> {/* Dynamic route */}
       </Routes>
+      <Chatbot/>
     </BrowserRouter>
   )
 }

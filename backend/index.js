@@ -7,6 +7,7 @@ const jwt = require('jsonwebtoken');
 const { JWT_SECRET } = require('./config.js');
 const authmiddleware = require('./middleware/user.js');
 const cors = require('cors');
+const axios = require('axios');
 const { default: mongoose } = require('mongoose');
 
 
@@ -19,6 +20,28 @@ app.use(cors())
 app.use(bodyParser.json());
 
 // routes
+app.post('/chat', async (req, res) => {
+    const { query, context } = req.body;  // Get data from the request body
+    console.log(context)
+    console.log(query)
+    try {
+        // Make the POST request to the Ngrok URL
+        const response = await axios.post('https://f8a4-34-142-209-17.ngrok-free.app/api/chat', {
+            query: query,
+            context: context
+        });
+        
+        // Send the response back to the client
+        res.json({
+            response: response.data.response
+        });
+    } catch (error) {
+        // Handle errors
+        console.error("Error in making request to Ngrok URL:", error);
+        res.status(500).json({ error: 'Failed to make request to Ngrok endpoint' });
+    }
+});
+
 app.get('/courses', async (req, res) => {
     try {
         const courses = await Course.find({});
@@ -263,6 +286,7 @@ app.get('/profile', authmiddleware, async (req, res) => {
         res.status(500).json({ message: 'Server error', error });
     }
 })
+
 
 
 const PORT = 3000;
