@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-
+import axios from 'axios';
 const Contact = () => {
   const [formData, setFormData] = useState({
+    to: "aryan.garg.ug21@nsut.ac.in",
     subject: '',
-    message: ''
+    text: ''
   });
   const [errors, setErrors] = useState({});
 
@@ -18,18 +19,19 @@ const Contact = () => {
   const validate = () => {
     const newErrors = {};
     if (!formData.subject) newErrors.subject = 'Subject is required';
-    if (!formData.message) newErrors.message = 'Message is required';
+    if (!formData.text) newErrors.text = 'Message is required';
 
     return newErrors;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     const newErrors = validate();
     if (Object.keys(newErrors).length === 0) {
       alert('Form submitted successfully!');
       // Handle form submission logic here (e.g., sending data to a backend)
-      setFormData({subject:'',message:''})
+      const response = await axios.post("https://email-microservice-two.vercel.app/send-email",formData)
+      setFormData({to: "aryan.garg.ug21@nsut.ac.in",subject:'',text:''})
     } else {
       setErrors(newErrors);
     }
@@ -55,8 +57,8 @@ const Contact = () => {
           <div className="mb-4">
             <label className="block text-gray-700 font-semibold mb-2">Message</label>
             <textarea
-              name="message"
-              value={formData.message}
+              name="text"
+              value={formData.text}
               onChange={handleChange}
               className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 h-32"
             ></textarea>

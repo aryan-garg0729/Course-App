@@ -26,7 +26,7 @@ app.post('/chat', async (req, res) => {
     console.log(query)
     try {
         // Make the POST request to the Ngrok URL
-        const response = await axios.post('https://f8a4-34-142-209-17.ngrok-free.app/api/chat', {
+        const response = await axios.post('https://f546-34-125-249-232.ngrok-free.app/api/chat', {
             query: query,
             context: context
         });

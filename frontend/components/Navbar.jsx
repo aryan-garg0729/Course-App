@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
+  const navigate = useNavigate("/")
   const [isOpen, setIsOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false); // State to track if user is logged in
 
@@ -23,7 +24,7 @@ const Navbar = () => {
     // Perform logout logic, like removing token from localStorage
     localStorage.removeItem("Authorization")
     setIsLoggedIn(false);
-    window.location.reload(); // Refresh or redirect as needed
+    navigate("/")
   };
 
   const commonMobileClasses = "block px-3 py-2 text-gray-800 hover:text-purple-600"
