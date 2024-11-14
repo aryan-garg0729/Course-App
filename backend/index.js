@@ -26,7 +26,7 @@ app.post('/chat', async (req, res) => {
     console.log(query)
     try {
         // Make the POST request to the Ngrok URL
-        const response = await axios.post('https://f546-34-125-249-232.ngrok-free.app/api/chat', {
+        const response = await axios.post('https://39b0-34-82-134-48.ngrok-free.app/api/chat', {
             query: query,
             context: context
         });
@@ -249,6 +249,11 @@ app.post('/buy', authmiddleware, async (req, res) => {
     if (alreadyEnrolled) {
         return res.status(400).json({ message: 'You are already enrolled in this course' });
     }
+    const response = await axios.post('https://paymentapi-production-cfcd.up.railway.app/api/payments', {
+        userId: user.email,
+        paymentMethod: "credit_card",
+        amount:499
+      });
     await User.updateOne({
         email: user.email
     }, {

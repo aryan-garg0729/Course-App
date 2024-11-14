@@ -69,6 +69,7 @@ const CourseDetail = () => {
                     },
                 }
             );
+            
             console.log(response);
             notify(response.data.message, 200);
         } catch (error) {
