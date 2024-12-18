@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 const Contact = () => {
   const [formData, setFormData] = useState({
-    to: "aryan.garg.ug21@nsut.ac.in",
+    to: "test@gmail.com",
     subject: '',
     text: ''
   });
@@ -31,7 +31,7 @@ const Contact = () => {
       alert('Form submitted successfully!');
       // Handle form submission logic here (e.g., sending data to a backend)
       const response = await axios.post("https://email-microservice-two.vercel.app/send-email",formData)
-      setFormData({to: "aryan.garg.ug21@nsut.ac.in",subject:'',text:''})
+      setFormData({to: "test@gmail.com",subject:'',text:''})
     } else {
       setErrors(newErrors);
     }

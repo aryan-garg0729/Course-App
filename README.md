@@ -10,6 +10,7 @@ A comprehensive course-selling platform built using the MERN (MongoDB, Express, 
 - **Course Management**: Instructors can create, edit, and manage their courses.
 - **Profile Management**: Users can manage their profile and view enrolled courses.
 - **Responsive UI**: Styled with Tailwind CSS for consistency across devices.
+- **Chatbot**: Users can chat with bot to know about courses.
 
 ## Tech Stack
 
@@ -17,6 +18,7 @@ A comprehensive course-selling platform built using the MERN (MongoDB, Express, 
 - **Backend**: Node.js, Express.js
 - **Database**: MongoDB
 - **Authentication**: JSON Web Tokens (JWT)
+- **Chatbot**: Python
 
 ## Installation
 
